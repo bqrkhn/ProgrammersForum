@@ -1,0 +1,19 @@
+{% extends "main/base.html" %}
+{% load discussions_extras %}
+{% block title %} Discussions
+{% endblock %}
+{% block body %}
+{% include "main/nav.html" %}
+<form method="post" action="{% if question %}{% url 'discussions:edit' 'Q'|addstr:question.id %} {% elif answer %}{% url 'discussions:edit' 'A'|addstr:answer.id %} {% else %}{% url 'discussions:index' %}{% endif %}">
+                {% csrf_token %}
+                {% for field in form %}
+                    {% if not answer or field.name != 'title' %}
+                        <div class="form-group">
+                            <label for="{{ field.name }}">{{ field.label }}:</label>
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <button class="btn btn-primary btn-block" type="submit">{% if question or answer %} Save {% else %}Ask a question{% endif %}</button>
+            </form>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends "main/base.html" %}
+{% load discussions_extras %}
+{% load static %}
+{% block title %}Sign in{% endblock %}
+{% block body %}
+    <div class="container"><br>
+        <h4>Search results for "{{ request.GET.q }}" :</h4><hr><br>
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#user" role="tab" aria-controls="home">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#discussions" role="tab" aria-controls="user">Discussions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#posts" role="tab" aria-controls="messages">Posts</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="user" role="tabpanel"><br>
+                    {% for user in users %}
+                        <div class="col-8 offset-2">
+                           <div class="card">
+                              <a style="color: black;" href="{% url 'main:profile' user.username %}"> <div class="card-block">
+                                  <div class="container">
+                                      <div class="row">
+                                          <div class="col-3">
+                                              <img src="#" class="img-responsive" alt="img" style="width: 100px; height: 100px;">
+                                          </div>
+                                          <div class="col-5">
+                                              <strong>Name: </strong> {{ user.first_name|title }} {{ user.last_name|title }} <br>
+                                              <strong>Username: </strong> @{{ user.username }}<br>
+                                              <strong>Email: </strong> {{ user.views }}<br>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div></a>
+                           </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="tab-pane" id="discussions" role="tabpanel"><br>
+                    {% for discussion in discussions %}
+                        <div class="col-8 offset-2">
+                           <div class="card">
+                               <div class="card-block">
+                                      <div class="container">
+                                           <h5><a href="{% url 'discussions:question' 'Q'|addstr:discussion.id %}"> {{ discussion.title }}</a><small>&nbsp;by <a href="{% url 'main:profile' discussion.username.username %}">@{{ discussion.username.username }}</a></small></h5>
+                                          <p> {{ discussion.description|truncatechars:50 }}</p>
+                                      </div>
+                               </div>
+                           </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="tab-pane" id="posts" role="tabpanel"><br>
+                    {% for post in posts %}
+                        <div class="col-8 offset-2">
+                           <div class="card">
+                               <div class="card-block">
+                                      <div class="container">
+                                           <h5><a href="{% url 'main:post' 'P'|addstr:post.id %}">{{ post.title }}</a><small>&nbsp;by <a href="{% url 'main:profile' post.username.username %}">@{{ post.username.username }}</a></small></h5>
+                                          <p> {{ post.description|truncatechars:50 }}</p>
+                                      </div>
+                               </div>
+                           </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "main/base.html" %}
+{% load discussions_extras %}
+{% block title %} Discussions
+{% endblock %}
+{% block body %}
+{% include "main/nav.html" %}<br>
+    <div class="container">
+        <div class="row">
+            <div class="col-7">
+                <h3>Discussions:</h3><hr>
+                    <div class="col-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#top" role="tab" aria-controls="top">Popular</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#recent" role="tab" aria-controls="profile">Recent</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#unanswered" role="tab" aria-controls="unanswered">Answers</a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="top" role="tabpanel"><br>
+                        <div class="overflow">
+                            <ul class="list-group">
+                                {% for question in questions|dictsortreversed:"votes" %}
+                                     <li class="list-group-item justify-content-between" data-toggle="tooltip" data-placement="top" title="asked by {{ question.username }} on {{ question.date }} has {{ question.count }} answers">
+                                        <a href=" {% url 'discussions:question' 'Q'|addstr:question.id %}" style="color: black"><h5>{{ question.id }}{{ question.title }}</h5></a>
+                                        <span class="badge badge-default badge-pill bg-{% if question.votes >= 0 %}success{% else %}danger{% endif %}">{{ question.votes }}</span>
+                                     </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="recent" role="tabpanel"><br>
+                        <div class="overflow">
+                            <ul class="list-group">
+                                {% for question in questions|dictsortreversed:"date" %}
+                                     <li class="list-group-item justify-content-between" data-toggle="tooltip" data-placement="top" title="asked by {{ question.username }} on {{ question.date }} has {{ question.count }} answers">
+                                        <a href="{% url 'discussions:question' 'Q'|addstr:question.id %}" style="color: black"><h5>{{ question.title }}</h5></a>
+                                        <span class="badge badge-default badge-pill bg-{% if question.votes >= 0 %}success{% else %}danger{% endif %}">{{ question.votes }}</span>
+                                     </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                  <div class="tab-pane" id="unanswered" role="tabpanel"><br>
+                      <div class="overflow">
+                            <ul class="list-group">
+                                {% for question in questions|dictsort:"count" %}
+                                         <li class="list-group-item justify-content-between" data-toggle="tooltip" data-placement="top" title="asked by {{ question.username }} on {{ question.date }} has {{ question.count }} answers">
+                                            <a href="{% url 'discussions:question' 'Q'|addstr:question.id %}" style="color: black"><h5>{{ question.title }}</h5></a>
+                                            <span class="badge badge-default badge-pill bg-{% if question.votes >= 0 %}success{% else %}danger{% endif %}">{{ question.votes }}</span>
+                                         </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 offset-1">
+            <h3>Recent Activity:</h3><hr>
+            {% for activity in activities %}
+                {% if activity.on_username %}
+                    {% if activity.AID %}
+                        {% if activity.vote == True %}
+                            <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> upvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s answer to question <a href="{% url 'discussions:question' 'Q'|addstr:activity.AID.QID.id %}"> {{ activity.AID.QID.title }}</a><hr>
+                        {% else %}
+                            <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> downvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s answer to question <a href="{% url 'discussions:question' 'Q'|addstr:activity.AID.QID.id %}"> {{ activity.AID.QID.title }}</a><hr>
+                        {% endif %}
+                    {% else %}
+                        {% if activity.vote == True %}
+                            <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> upvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s question <a href="{% url 'discussions:question' 'Q'|addstr:activity.QID.id %}"> {{ activity.QID.title }}</a><hr>
+                        {% else %}
+                            <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> downvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s question <a href="{% url 'discussions:question' 'Q'|addstr:activity.QID.id %}"> {{ activity.QID.title }}</a><hr>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    {% if activity.AID %}
+                        <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> answered<a href="{% url 'discussions:question' 'Q'|addstr:activity.AID.QID.id %}"> {{ activity.AID.QID.title }}</a><hr>
+                    {% else %}
+                            <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> asked <a href="{% url 'discussions:question' 'Q'|addstr:activity.QID.id  %}">{{ activity.QID.title }}</a><hr>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load discussions_extras %}
+{% block title %}Activity{% endblock %}
+{% block body %}<br>
+    <div class="container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th colspan="2">Activity</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+              {% for activity in activities %}<tr>
+                    {% if activity.on_username %}
+                        {% if activity.AID %}
+                            {% if activity.vote == True %}
+                                <td colspan="2"><a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> upvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s answer to question <a href="{% url 'discussions:question'  'Q'|addstr:activity.AID.QID.id  %}"> {{ activity.AID.QID.title }}</a>
+                                </td>
+                                <td data-toggle="tooltip" data-placement="top" title="{{ activity.datetime }}">{{ activity.datetime|naturaltime }}</td>
+                            {% else %}
+                                <td colspan="2"><a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> downvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s answer to question <a href="{% url 'discussions:question'  'Q'|addstr:activity.AID.QID.id  %}"> {{ activity.AID.QID.title }}</a>
+                                </td><td data-toggle="tooltip" data-placement="top" title="{{ activity.datetime }}">{{ activity.datetime|naturaltime }}</td>
+                            {% endif %}
+                        {% else %}
+                            {% if activity.vote == True %}
+                                <td colspan="2"><a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> upvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s question <a href="{% url 'discussions:question'  'Q'|addstr:activity.QID.id  %}"> {{ activity.QID.title }}</a>
+                                </td><td data-toggle="tooltip" data-placement="top" title="{{ activity.datetime }}">{{ activity.datetime|naturaltime }}</td>
+                            {% else %}
+                                <td colspan="2"><a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> downvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s question <a href="{% url 'discussions:question'  'Q'|addstr:activity.QID.id   %}"> {{ activity.QID.title }}</a>
+                                </td><td data-toggle="tooltip" data-placement="top" title="{{ activity.datetime }}">{{ activity.datetime|naturaltime }}</td>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {% if activity.AID %}
+                            <td colspan="2"><a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> answered </a><a href="{% url 'discussions:question'  'Q'|addstr:activity.AID.QID.id  %}"> {{ activity.AID.QID.title }}</a>
+                            </td><td data-toggle="tooltip" data-placement="top" title="{{ activity.datetime }}">{{ activity.datetime|naturaltime }}</td>
+                        {% else %}
+                            <td colspan="2" ><a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> asked <a href="{% url 'discussions:question'  'Q'|addstr:activity.QID.id   %}">{{ activity.QID.title }}</a>
+                            </td><td data-toggle="tooltip" data-placement="top" title="{{ activity.datetime }}">{{ activity.datetime|naturaltime }}</td>
+                        {% endif %}
+                    {% endif %}</tr>
+              {% endfor %}
+          </tbody>
+        </table>
+    </div>
+{% endblock %}

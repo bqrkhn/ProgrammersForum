@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+{% load discussions_extras %}
+{% block title %} Discussions
+{% endblock %}
+{% block body %}
+{% include "main/nav.html" %}
+    <div class="container">
+    <br><h4>Confirm deletion:</h4><hr><br>
+        {% if question %}
+            <div class="card">
+                <div class="card-block">
+                    <h5>Are you sure you want to delete your question <a href="{% url 'discussions:question' 'Q'|addstr:question.id %}">{{ question.title }}</a> </h5>
+                    <br><br>
+                    <div class="text-left">
+                        <a href="{% url 'discussions:confirm' 'Q'|addstr:question.id %}"><button class="btn btn-success">Yes, I'am</button> </a>
+                        <a href="{% url 'discussions:question' 'Q'|addstr:question.id %}"><button class="btn btn-danger">No, take me back</button> </a>
+                    </div>
+                </div>
+            </div>
+        {% elif answer %}
+            <div class="card">
+                <div class="card-block">
+                    <h5>Are you sure you want to delete your answer to the question <a href="{% url 'discussions:question' 'Q'|addstr:answer.QID.id %}">{{ answer.QID.title }}</a> </h5>
+                    <br><br>
+                    <div class="text-left">
+                        <a href="{% url 'discussions:confirm' 'A'|addstr:answer.id %}"><button class="btn btn-success">Yes, I'am</button> </a>
+                        <a href="{% url 'discussions:question' 'Q'|addstr:answer.QID.id %}"><button class="btn btn-danger">No, take me back</button> </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

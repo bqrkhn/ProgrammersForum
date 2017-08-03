@@ -1,0 +1,235 @@
+{% extends "main/base.html" %}
+{% load discussions_extras %}
+{% block title %} Discussions
+{% endblock %}
+{% block body %}
+{% include "main/nav.html" %}
+    <div class="container"><br>
+    <div class="row">
+        <div class="col-10"><h4>{{ question.title }}</h4></div>
+        <div class="col-2"><a href="{% url 'discussions:ask' %}"><button class="btn btn-primary">Question ?</button> </a> </div></div>
+        <hr><br>
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td class="votecell">
+                                    <a class="vote-up-off"><button class="btn btn-success img-rounded {% for vote in votes %} {% if vote.QID.id == question.id and vote.vote %}disabled{% endif %}{% endfor %} {% if question.username == request.user %} disabled{% endif %}" onclick="vote($(this));return false;" id="up_Q{{ question.id }}">+1</button> </a><br>
+                                    <span class="vote-count-post" id="count_Q{{ question.id }}">{{ question.votes }}</span><br>
+                                    <a class="vote-up-off"><button class="btn btn-danger img-rounded {% for vote in votes %} {% if vote.QID.id == question.id and not vote.vote %} disabled{% endif %}{% endfor %}{% if question.username == request.user %} disabled {% endif %}" onclick="vote($(this));return false;" id="down_Q{{ question.id }}">-1</button> </a><br>
+
+                                </td>
+                                <td class="postcell" style="width: 100%;">
+                                    <p>{{ question.description|linebreaks }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="row">
+                                        <div class="col-6"></div>
+                                        {% if request.user == question.username %}
+                                        <div class="col-1 text-right border-top rounded" style="margin-top: 1.5%">
+                                            <a href="{% url 'discussions:delete' 'Q'|addstr:question.id %}">Delete</a>
+                                        </div>
+                                        <div class="col-1 text-right border-top rounded" style="margin-top: 1.5%">
+                                            <a href="{% url 'discussions:edit' 'Q'|addstr:question.id %}">Edit</a>
+                                        </div>
+                                        {% else %}
+                                            <div class="col-2"></div>
+                                        {% endif %}
+                                        <div class="col-4 text-right border-top rounded" style="background-color:#f5f5f5;">
+                                            <small>asked by {{ question.username }}</small><br>
+                                            <small>on {{ question.date }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                <br><hr><br>
+                <h5>{{ answers.count }} Answers:</h5><br>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#votes" role="tab" aria-controls="home">Votes</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#recent" role="tab" aria-controls="profile">Recent</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#oldest" role="tab" aria-controls="messages">Oldest</a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane active" id="votes" role="tabpanel"><br><br>
+                      {% for answer in answers|dictsortreversed:"votes" %}
+                        <table>
+                        <tbody>
+                            <tr>
+                                <td class="votecell">
+                                    <a class="vote-up-off"><button class="btn btn-success img-rounded {% for vote in votes %} {% if vote.AID.id == answer.id and vote.vote %}  disabled {% endif %}{% endfor %}{% if answer.username == request.user %}  disabled{% endif %}" onclick="vote($(this));return false;" id="up_A{{ answer.id }}">+1</button> </a><br>
+                                    <span class="vote-count-post" id="count_A{{ answer.id }}">{{ answer.votes }}</span><br>
+                                    <a class="vote-up-off"><button class="btn btn-danger img-rounded {% for vote in votes %} {% if vote.AID.id == answer.id and not vote.vote %} disabled {% endif %}{% endfor %}{% if answer.username == request.user %} disabled{% endif %}" onclick="vote($(this));return false;" id="down_A{{ answer.id }}">-1</button> </a><br>
+                                </td>
+                                <td class="postcell" style="width: 100%;">
+                                    <p>{{ answer.description|linebreaks }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="row">
+                                        <div class="col-6"></div>
+                                        {% if request.user == answer.username %}
+                                        <div class="col-1 text-right border-top rounded" style="margin-top: 1.5%">
+                                            <a href="{% url 'discussions:delete' 'A'|addstr:answer.id %}">Delete</a>
+                                        </div>
+                                        <div class="col-1 text-right border-top rounded" style="margin-top: 1.5%">
+                                            <a href="{% url 'discussions:edit' 'A'|addstr:answer.id %}">Edit</a>
+                                        </div>
+                                        {% else %}
+                                            <div class="col-2"></div>
+                                        {% endif %}
+                                        <div class="col-4 text-right border-top rounded" style="background-color:#f5f5f5;">
+                                            <small>asked by {{ answer.username }}</small><br>
+                                            <small>on {{ answer.date }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <br><hr><br>
+                      {% endfor %}
+                  </div>
+                  <div class="tab-pane" id="recent" role="tabpanel">
+                      <br><br>
+                      {% for answer in answers|dictsortreversed:"votes" %}
+                        <table>
+                        <tbody>
+                            <tr>
+                                <td class="votecell">
+                                    <a class="vote-up-off"><button class="btn btn-success img-rounded {% for vote in votes %} {% if vote.AID.id == answer.id and vote.vote %}  disabled {% endif %}{% endfor %}{% if answer.username == request.user %}  disabled{% endif %}" onclick="vote($(this));return false;" id="up_A{{ answer.id }}">+1</button> </a><br>
+                                    <span class="vote-count-post" id="count_A{{ answer.id }}">{{ answer.votes }}</span><br>
+                                    <a class="vote-up-off"><button class="btn btn-danger img-rounded {% for vote in votes %} {% if vote.AID.id == answer.id and not vote.vote %} disabled {% endif %}{% endfor %}{% if answer.username == request.user %} disabled{% endif %}" onclick="vote($(this));return false;" id="down_A{{ answer.id }}">-1</button> </a><br>
+                                </td>
+                                <td class="postcell" style="width: 100%;">
+                                    <p>{{ answer.description|linebreaks }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="row">
+                                        <div class="col-6"></div>
+                                        {% if request.user == answer.username %}
+                                        <div class="col-1 text-right border-top rounded" style="margin-top: 1.5%">
+                                            <a href="{% url 'discussions:delete' 'A'|addstr:answer.id %}">Delete</a>
+                                        </div>
+                                        <div class="col-1 text-right border-top rounded" style="margin-top: 1.5%">
+                                            <a href="{% url 'discussions:edit' 'A'|addstr:answer.id %}">Edit</a>
+                                        </div>
+                                        {% else %}
+                                            <div class="col-2"></div>
+                                        {% endif %}
+                                        <div class="col-4 text-right border-top rounded" style="background-color:#f5f5f5;">
+                                            <small>asked by {{ answer.username }}</small><br>
+                                            <small>on {{ answer.date }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <br><hr><br>
+                      {% endfor %}
+                  </div>
+                  <div class="tab-pane" id="oldest" role="tabpanel">
+                      <br><br>
+                      {% for answer in answers|dictsortreversed:"votes" %}
+                        <table>
+                        <tbody>
+                            <tr>
+                                <td class="votecell">
+                                    <a class="vote-up-off"><button class="btn btn-success img-rounded {% for vote in votes %} {% if vote.AID.id == answer.id and vote.vote %}  disabled {% endif %}{% endfor %}{% if answer.username == request.user %}  disabled{% endif %}" onclick="vote($(this));return false;" id="up_A{{ answer.id }}">+1</button> </a><br>
+                                    <span class="vote-count-post" id="count_A{{ answer.id }}">{{ answer.votes }}</span><br>
+                                    <a class="vote-up-off"><button class="btn btn-danger img-rounded {% for vote in votes %} {% if vote.AID.id == answer.id and not vote.vote %} disabled {% endif %}{% endfor %}{% if answer.username == request.user %} disabled{% endif %}" onclick="vote($(this));return false;" id="down_A{{ answer.id }}">-1</button> </a><br>
+                                </td>
+                                <td class="postcell" style="width: 100%;">
+                                    <p>{{ answer.description|linebreaks }}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="row">
+                                        <div class="col-6"></div>
+                                        {% if request.user == answer.username %}
+                                        <div class="col-1 text-right border-top rounded" style="margin-top: 1.5%">
+                                            <a href="{% url 'discussions:delete' 'A'|addstr:answer.id %}">Delete</a>
+                                        </div>
+                                        <div class="col-1 text-right border-top rounded" style="margin-top: 1.5%">
+                                            <a href="{% url 'discussions:edit' 'A'|addstr:answer.id %}">Edit</a>
+                                        </div>
+                                        {% else %}
+                                            <div class="col-2"></div>
+                                        {% endif %}
+                                        <div class="col-4 text-right border-top rounded" style="background-color:#f5f5f5;">
+                                            <small>asked by {{ answer.username }}</small><br>
+                                            <small>on {{ answer.date }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <br><hr><br>
+                      {% endfor %}
+                  </div>
+                </div>
+                <form method="post" action="{% url 'discussions:answer' question_id='Q'|addstr:question.id %}">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.name }}">{{ field.label }}:</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                <button class="btn btn-primary" type="submit">Answer</button>
+            </form>
+            </div>
+                <div class="col-3 offset-1">
+                    <h4>Related Questions:</h4><hr>
+                    {% for r in related %}
+                        <a href="{% url 'discussions:question' with 'Q'|add:r.id as template %}">{{ r.title }}</a><hr>
+                    {% endfor %}
+                    <br>
+                    <h4>Recent Activity:</h4><hr>
+                    {% for activity in activities %}
+                        {% if activity.on_username %}
+                            {% if activity.AID %}
+                                {% if activity.vote == True %}
+                                    <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> upvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s answer to question <a href="{% url 'discussions:question' with 'Q'|add:activity.AID.QID.id as template %}"> {{ activity.AID.QID.title }}</a><hr>
+                                {% else %}
+                                    <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> downvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s answer to question <a href="{% url 'discussions:question' with 'Q'|add:activity.AID.QID.id as template %}"> {{ activity.AID.QID.title }}</a><hr>
+                                {% endif %}
+                            {% else %}
+                                {% if activity.vote == True %}
+                                    <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> upvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s question <a href="{% url 'discussions:question' with 'Q'|add:activity.QID.id as template %}"> {{ activity.QID.title }}</a><hr>
+                                {% else %}
+                                    <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> downvoted <a href="{% url 'main:profile' activity.on_username.username %}">@{{ activity.on_username.username }}</a>'s question <a href="{% url 'discussions:question' with 'Q'|add:activity.QID.id as template  %}"> {{ activity.QID.title }}</a><hr>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            {% if activity.AID %}
+                                <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> answered <a href="{% url 'discussions:question' with 'Q'|add:activity.AID.QID.id as template %}"> {{ activity.AID.QID.title }}</a><hr>
+                            {% else %}
+                                <a href="{% url 'main:profile' activity.by_username.username %}">@{{ activity.by_username.username }}</a> asked <a href="{% url 'discussions:question' with 'Q'|add:activity.QID.id as template  %}">{{ activity.QID.title }}</a><hr>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

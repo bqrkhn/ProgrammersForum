@@ -1,0 +1,66 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load discussions_extras %}
+{% block title %}Activity | {{ user.username }}{% endblock %}
+{% block body %}<br>
+    <div class="container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th colspan="2">Activity</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+              {% for activity in activities %}<tr>
+                    {% if activity.by_username == user and activity.type  %}
+                        {% if activity.AID %}
+                            <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.QID.id %}"> @{{ activity.by_username.username }} answered {{ activity.QID.title }}</a></td>
+                            <td>{{ activity.datetime }}</td>
+                        {% else %}
+                            <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.QID.id %}"> @{{ activity.by_username.username }} asked {{ activity.QID.title }}</a></td>
+                            <td>{{ activity.datetime }}</td>
+                        {% endif %}
+                    {% elif  activity.by_username == user %}
+                        {% if activity.AID %}
+                            {% if activity.vote == True %}
+                                <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.AID.QID.id%}"> @{{ activity.by_username.username }} upvoted answer</a></td>
+                                <td>{{ activity.datetime }}</td>
+                            {% else %}
+                                <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.AID.QID.id%}"> @{{ activity.by_username.username }} downvoted answer</a></td>
+                                <td>{{ activity.datetime }}</td>
+                            {% endif %}
+                        {% else %}
+                            {% if activity.vote == True %}
+                                <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.QID.id %}"> @{{ activity.by_username.username }} upvoted question</a></td>
+                                <td>{{ activity.datetime }}</td>
+                            {% else %}
+                                <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.QID.id %}"> @{{ activity.by_username.username }} downvoted question</a></td>
+                                <td>{{ activity.datetime }}</td>
+                            {% endif %}
+                        {% endif %}
+                    {% elif activity.on_username == user %}
+                        {% if activity.AID %}
+                            {% if activity.vote == True %}
+                                <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.AID.QID.id%}"> @{{ activity.by_username.username }} upvoted @{{ user.username }}'s answer</a></td>
+                                <td>{{ activity.datetime }}</td>
+                            {% else %}
+                                <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.AID.QID.id%}"> @{{ activity.by_username.username }} downvoted @{{ user.username }}'s answer</a></td>
+                                <td>{{ activity.datetime }}</td>
+                            {% endif %}
+                        {% else %}
+                            {% if activity.vote == True %}
+                                <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.QID.id %}"> @{{ activity.by_username.username }} upvoted @{{ user.username }}'s question</a></td>
+                                <td>{{ activity.datetime }}</td>
+                            {% else %}
+                                <td colspan="2"><a href="{% url 'discussions:question' 'Q'|addstr:activity.QID.id %}"> @{{ activity.by_username.username }} downvoted @{{ user.username }}'s question</a></td>
+                                <td>{{ activity.datetime }}</td>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+    </div>
+{% endblock %}

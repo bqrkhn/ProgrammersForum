@@ -1,0 +1,58 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+{% block body %}<br>
+    <div class="container">
+        <h3>User Profile:</h3><hr><br>
+        <div class="row">
+            <div class="col-4">
+                <div class="card" style="width: 20rem;">
+                   <div class="container-fluid"><br>
+                  <img class="card-img-top img-responsive" src="{% static 'main/images/profile.svg' %}" style="width: 100%" alt="Card image cap">
+                       </div>
+                  <div class="card-block text-left">
+                    <h4 class="card-title">{{ user.first_name|title }}'s details</h4><hr>
+                        <table class="table table-striped">
+                          <tbody>
+                            <tr>
+                              <th scope="row">Name</th>
+                              <td>{{ user.first_name|title}} {{ user.last_name|title }}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Profile Views</th>
+                              <td>{{ profile.views }}</td>
+                            </tr>
+                            <tr class="text-center">
+                              <td colspan="2">
+                                  <a href="#"><button class="btn btn-primary">Facebook</button></a>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                  </div>
+                </div>
+                </div>
+                <div class="col-5 offset-1">
+                   <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#profile" role="tab" aria-controls="home">Profile</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#activity" role="tab" aria-controls="profile">Activity</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#edit" role="tab" aria-controls="messages">Edit</a>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content">
+                      <div class="tab-pane active" id="profile" role="tabpanel">...</div>
+                      <div class="tab-pane" id="activity" role="tabpanel">...</div>
+                      <div class="tab-pane" id="edit" role="tabpanel">...</div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

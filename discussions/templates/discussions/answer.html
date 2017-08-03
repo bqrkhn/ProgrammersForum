@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PF</title>
+</head>
+<body>
+<h3>{{ question.title }}</h3>
+            <form method="post" action="{% url 'discussions:question' question.QID %}">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.name }}">{{ field.label }}:</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+                <button class="btn btn-primary btn-block" type="submit">Answer</button>
+            </form>
+</body>
+</html>
