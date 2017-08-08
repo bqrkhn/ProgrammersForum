@@ -5,6 +5,7 @@ from .models import Question, Answer, Vote, User
 from django.db.models import Q
 from main.models import Profile, Activity
 from difflib import SequenceMatcher
+from main.form import Loginform
 
 
 # Create your views here.
@@ -18,6 +19,8 @@ def ask(request):
 
 
 def index(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('main:login'))
     if request.method == "POST" and request.POST.get('title', None) and request.POST.get('description', None):
         question = Question.objects.create(title=request.POST["title"], description=request.POST["description"],
                                            username=User.objects.get(username=request.user.username))

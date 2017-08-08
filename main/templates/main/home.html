@@ -57,7 +57,7 @@
        </div><br><br>
 
     <div class="row">
-        <div class="col col-lg-4 offset-1">
+        <div class="col-lg-6 offset-1">
             <div class="card">
                 <h3 class="card-header">
                    Posts
@@ -76,17 +76,16 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-1"></div>
-        <div class="col col-lg-4 offset-1">
+        </div><br>
+        <div class="col-lg-3 offset-1">
             <div class="card">
                 <h3 class="card-header">
                 Top programmers
                 </h3>
                 <div class="card-block">
-                    <ul class="list-group">
+                    <ul class="list-group" style="width: 100%;">
                         {% for user in users %}
-                            <a href="{% url 'main:profile' user.username %}"><li class="list-group-item">{{ user.username }} <span class="badge badge-default badge-pill float-right">{{ user.profile_set.all.0.points }}</span></li></a>
+                            <a href="{% url 'main:profile' user.username %}"><li class="list-group-item" style="width: 100%;">@{{ user.username }} <span class="badge badge-default badge-pill" style="margin-left: 0;">{{ user.profile_set.all.0.points }}</span></li></a>
                         {% endfor %}
                       </ul>
                 </div>

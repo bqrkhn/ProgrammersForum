@@ -1,7 +1,9 @@
 {% url 'main:index' as home %}
 {% url 'main:posts' as posts %}
 {% url 'main:about' as about %}
-{% url 'discussions:index' as discussioxns %}
+{% url 'main:login' as login %}
+{% url 'main:signup' as signup %}
+{% url 'discussions:index' as discussions %}
 <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -28,10 +30,10 @@
         </ul>
           <ul class="navbar-nav ml-auto">
           {% if not user.is_authenticated %}
-              <li class="nav-item">
+              <li class="nav-item {% if request.get_full_path == login %}active{% endif %}">
                 <a class="nav-link" href="{% url 'main:login' %}">Log In</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item {% if request.get_full_path == signup %}active{% endif %}">
                 <a class="nav-link" href="{% url 'main:signup' %}">Sign Up</a>
               </li>
           {% else %}

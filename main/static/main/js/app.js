@@ -25,6 +25,28 @@ $("#username").change(function () {
 
     });
 
+$("#username_login").change(function () {
+      var username = $(this).val();
+      $.ajax({
+        url: '/ajax/validate_username/',
+        data: {
+          'username': username
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            $("#login_username").addClass("form-group has-success").removeClass("form-group").removeClass("form-group has-danger")
+            $("#feedback_username").text("")
+          }
+          else{
+            $("#login_username").addClass("form-group has-danger").removeClass("form-group").removeClass("form-group has-success")
+            $("#feedback_username").text("Username does not exists")
+          }
+        }
+      });
+
+    });
+
 $("#email").change(function () {
     var email = $(this).val();
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;

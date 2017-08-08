@@ -1,7 +1,7 @@
 {% extends "main/base.html" %}
 {% load static %}
-{% block title %}Sign in{% endblock %}
-{% block body %}
+{% block title %}Sign up{% endblock %}
+{% block body %}<br>
     <div class="row justify-content-center">
         <div class="col-6">
            <div class="card">
@@ -20,6 +20,7 @@
                 <button class="btn btn-primary text-center" type="submit">Sign up</button>
                 </div>
                 </form>
+              <small>Already have an account? <a href="{% url 'main:login' %}">Log in here</a></small>
               </div>
             </div>
         </div>
