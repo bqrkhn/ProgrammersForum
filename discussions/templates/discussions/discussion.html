@@ -6,7 +6,7 @@
 {% include "main/nav.html" %}<br>
     <div class="container">
         <div class="row">
-            <div class="col-7">
+            <div class="col-lg-7">
                 <h3>Discussions:</h3><hr>
                     <div class="col-12">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -61,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-4 offset-1">
+        <div class="col-lg-4 offset-1">
             <h3>Recent Activity:</h3><hr>
             {% for activity in activities %}
                 {% if activity.on_username %}
