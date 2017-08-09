@@ -1,8 +1,8 @@
 from .form import Loginform, Signupform
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, Http404
+from django.http import HttpResponseRedirect, Http404
 from django.http import HttpResponse, JsonResponse
 from .models import Profile, Activity, View, Post
 from discussions.models import Question
@@ -26,7 +26,10 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('main:profile', username=user.username)
+            if request.method == "GET":
+                if request.GET["next"]:
+                    return HttpResponseRedirect(request.GET['next'])
+            return HttpResponseRedirect(reverse('main:profile', kwargs={'username': user.username}))
     return render(request, 'main/login.html', {"form": Loginform(request.POST or None)})
 
 
