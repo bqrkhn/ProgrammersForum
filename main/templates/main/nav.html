@@ -3,6 +3,7 @@
 {% url 'main:about' as about %}
 {% url 'main:login' as login %}
 {% url 'main:signup' as signup %}
+{% url 'main:profile' request.user.username as profile %}
 {% url 'discussions:index' as discussions %}
 <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +38,7 @@
                 <a class="nav-link" href="{% url 'main:signup' %}">Sign Up</a>
               </li>
           {% else %}
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown {% if request.get_full_path == profile %}active{% endif %}">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {{ user.username }}
                 </a>

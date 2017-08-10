@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, reverse, get_object_or_404
 from .form import QuestionForm, AnswerForm
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
@@ -18,9 +19,8 @@ def ask(request):
     return render(request, 'discussions/ask.html', {"form": QuestionForm()})
 
 
+@login_required
 def index(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('main:login'))
     if request.method == "POST" and request.POST.get('title', None) and request.POST.get('description', None):
         question = Question.objects.create(title=request.POST["title"], description=request.POST["description"],
                                            username=User.objects.get(username=request.user.username))
@@ -32,6 +32,7 @@ def index(request):
                   {"questions": Question.objects.all(), "activities": Activity.objects.all()[:10]})
 
 
+@login_required
 def question(request, question_id):
     question_id = int(question_id[1:])
     question = get_object_or_404(Question, id=question_id)
@@ -49,6 +50,7 @@ def question(request, question_id):
                    "activities": Activity.objects.all()[:7], "form": AnswerForm()})
 
 
+@login_required
 def answer(request, question_id):
     question_id = int(question_id[1:])
     question = get_object_or_404(Question, id=question_id)
@@ -132,6 +134,7 @@ def vote(request):
     return JsonResponse({})
 
 
+@login_required
 def delete(request, id):
     if id[0] == 'Q':
         id = id[1:]
@@ -149,6 +152,7 @@ def delete(request, id):
             return HttpResponseRedirect(reverse('discussions:question', kwargs={'question_id': answer.QID.QID}))
 
 
+@login_required
 def confirm(request, id):
     if id[0] == 'Q':
         id = id[1:]
@@ -169,6 +173,7 @@ def confirm(request, id):
             return HttpResponseRedirect(reverse('discussions:question', kwargs={'question_id': answer.QID.id}))
 
 
+@login_required
 def edit(request, id):
     if request.method == "POST" and request.POST.get('description'):
         if id[0] == 'Q':
