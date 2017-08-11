@@ -85,7 +85,7 @@
                 <div class="card-block">
                     <ul class="list-group" style="width: 100%;">
                         {% for user in users %}
-                            <a href="{% url 'main:profile' user.username %}"><li class="list-group-item" style="width: 100%;">@{{ user.username }} <span class="badge badge-default badge-pill" style="margin-left: 0;">{{ user.profile_set.all.0.points }}</span></li></a>
+                            <a href="{% url 'main:profile' user.username %}"><li class="list-group-item" style="width: 100%;">@{{ user.username }} <span class="badge badge-default badge-pill" style="float:right;">{{ user.profile_set.all.0.points }}</span></li></a>
                         {% endfor %}
                       </ul>
                 </div>
