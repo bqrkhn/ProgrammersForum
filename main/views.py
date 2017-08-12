@@ -63,7 +63,9 @@ def profile(request, username):
 
 
 def index(request):
-    return render(request, 'main/home.html', {"posts": Post.objects.all()[:3], "users": User.objects.annotate(points=Sum('profile__points')).order_by('-points'), "questions": Question.objects.all()})
+    return render(request, 'main/home.html', {"posts": Post.objects.all()[:3],
+                                              "users": User.objects.annotate(points=Sum('profile__points')).order_by(
+                                                  '-points')[:5], "questions": Question.objects.all()})
 
 
 def validate_username(request):

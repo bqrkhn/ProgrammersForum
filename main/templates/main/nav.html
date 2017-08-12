@@ -6,49 +6,57 @@
 {% url 'main:profile' request.user.username as profile %}
 {% url 'discussions:index' as discussions %}
 <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+            aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-brand">Programmers Forum</div>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
+    </button>
+    <div class="navbar-brand">Programmers Forum</div>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item {% if request.get_full_path == home %}active{% endif %}">
-            <a class="nav-link" href="{% url 'main:index' %}">Home</a>
-          </li>
-          <li class="nav-item {% if request.get_full_path == posts %}active{% endif %}">
-            <a class="nav-link" href="{% url 'main:posts' %}">Posts</a>
-          </li>
-          <li class="nav-item {% if request.get_full_path == discussions %}active{% endif %}">
-            <a class="nav-link" href="{% url 'discussions:index' %}">Discussions</a>
-          </li>
-         <li class="nav-item {% if request.get_full_path == about %}active{% endif %}">
-            <a class="nav-link" href="{% url 'main:about' %}">About</a>
-          </li>&nbsp;&nbsp;
+            <li class="nav-item {% if request.get_full_path == home %}active{% endif %}">
+                <a class="nav-link" href="{% url 'main:index' %}">Home</a>
+            </li>
+            <li class="nav-item {% if request.get_full_path == posts %}active{% endif %}">
+                <a class="nav-link" href="{% url 'main:posts' %}">Posts</a>
+            </li>
+            <li class="nav-item {% if request.get_full_path == discussions %}active{% endif %}">
+                <a class="nav-link" href="{% url 'discussions:index' %}">Discussions</a>
+            </li>
+            <li class="nav-item {% if request.get_full_path == about %}active{% endif %}">
+                <a class="nav-link" href="{% url 'main:about' %}">About</a>
+            </li>
+            &nbsp;&nbsp;
             <form class="form-inline my-2 my-lg-0" action="{% url 'main:search' %}" method="get">
-              <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search">
-              <button class="btn btn-btn-secondary  my-2 my-sm-0" type="submit">Search</button>
+                <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search">
+                <button class="btn btn-btn-secondary  my-2 my-sm-0" type="submit">Search</button>
             </form>
         </ul>
-          <ul class="navbar-nav ml-auto">
-          {% if not user.is_authenticated %}
-              <li class="nav-item {% if request.get_full_path == login %}active{% endif %}">
-                <a class="nav-link" href="{% url 'main:login' %}">Log In</a>
-              </li>
-              <li class="nav-item {% if request.get_full_path == signup %}active{% endif %}">
-                <a class="nav-link" href="{% url 'main:signup' %}">Sign Up</a>
-              </li>
-          {% else %}
-              <li class="nav-item dropdown {% if request.get_full_path == profile %}active{% endif %}">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{ user.username }}
-                </a>
-                <div class="dropdown-menu" style=" right: 0;left: auto;" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="{% url 'main:profile' request.user.username %}">Profile</a>
-                  <a class="dropdown-item" href="{% url 'main:activity' request.user.username %}">Activity</a>
-                  <a class="dropdown-item" href="{% url 'main:logout' %}">Logout</a>
-                </div>
-              </li>
-          {% endif %}
+        <ul class="navbar-nav ml-auto">
+            {% if not user.is_authenticated %}
+                <li class="nav-item {% if request.get_full_path == login %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'main:login' %}">Log In</a>
+                </li>
+                <li class="nav-item {% if request.get_full_path == signup %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'main:signup' %}">Sign Up</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <button class="btn btn-success"> {{ request.user.profile_set.all.0.points }} points</button>
+                </li>&nbsp;&nbsp;
+                <li class="nav-item dropdown {% if request.get_full_path == profile %}active{% endif %}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        {{ user.username }}
+                    </a>
+
+                    <div class="dropdown-menu" style=" right: 0;left: auto;" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'main:profile' request.user.username %}">Profile</a>
+                        <a class="dropdown-item" href="{% url 'main:activity' request.user.username %}">Activity</a>
+                        <a class="dropdown-item" href="{% url 'main:logout' %}">Logout</a>
+                    </div>
+                </li>
+            {% endif %}
         </ul>
-      </div>
-    </nav>
+    </div>
+</nav>

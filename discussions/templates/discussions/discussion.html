@@ -3,8 +3,9 @@
 {% block title %} Discussions
 {% endblock %}
 {% block body %}
-{% include "main/nav.html" %}<br>
-    <div class="container">
+{% include "main/nav.html" %}
+    <div class="col-lg-2" style="float:right";><a href="{% url 'discussions:ask' %}"><button class="btn btn-primary">Question ?</button> </a> </div></div>
+    <br><br><div class="container">
         <div class="row">
             <div class="col-lg-7">
                 <h3>Discussions:</h3><hr>
