@@ -5,6 +5,7 @@
 {% url 'main:signup' as signup %}
 {% url 'main:profile' request.user.username as profile %}
 {% url 'discussions:index' as discussions %}
+{% url 'discussions:question' as question %}
 <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
             data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
@@ -20,7 +21,7 @@
             <li class="nav-item {% if request.get_full_path == posts %}active{% endif %}">
                 <a class="nav-link" href="{% url 'main:posts' %}">Posts</a>
             </li>
-            <li class="nav-item {% if request.get_full_path == discussions %}active{% endif %}">
+            <li class="nav-item {% if discussions in request.get_full_path %}active{% endif %}">
                 <a class="nav-link" href="{% url 'discussions:index' %}">Discussions</a>
             </li>
             <li class="nav-item {% if request.get_full_path == about %}active{% endif %}">
@@ -41,13 +42,14 @@
                     <a class="nav-link" href="{% url 'main:signup' %}">Sign Up</a>
                 </li>
                 {% else %}
-                <li class="nav-item">
-                    <button class="btn btn-success"> {{ request.user.profile_set.all.0.points }} points</button>
-                </li>&nbsp;&nbsp;
+                {% if discussions in request.get_full_path %}
+                <li class="nav-item {% if 'discussions/ask' in request.get_full_path %}active {% endif %}">
+                    <a href="{% url 'discussions:ask' %}" class="nav-link">Ask Question</a>
+                </li>&nbsp;&nbsp;{% endif %}
                 <li class="nav-item dropdown {% if request.get_full_path == profile %}active{% endif %}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        {{ user.username }}
+                        {{ user.username }} ({{ request.user.profile_set.all.0.points }})
                     </a>
 
                     <div class="dropdown-menu" style=" right: 0;left: auto;" aria-labelledby="navbarDropdownMenuLink">
