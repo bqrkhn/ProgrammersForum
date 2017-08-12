@@ -105,7 +105,12 @@
                             {% for user in users %}
                                 <a style="width: 100%" href="{% url 'main:profile' user.username %}">
                                     <li class="list-group-item">
-                                        <div class="col-lg-10">@{{ user.username }}</div>
+                                        <div class="col-lg-10">@{{ user.username }}
+                                        <span class="checkmark">
+                                            <div class="checkmark_stem"></div>
+                                            <div class="checkmark_kick"></div>
+                                        </span>
+                                        </div>
                                         <div class="col-lg-2"><span
                                                 class="badge badge-default badge-pill">{{ user.profile_set.all.0.points }}</span>
                                         </div>
