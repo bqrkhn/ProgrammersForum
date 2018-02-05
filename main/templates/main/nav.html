@@ -27,6 +27,9 @@
             <li class="nav-item {% if request.get_full_path == about %}active{% endif %}">
                 <a class="nav-link" href="{% url 'main:about' %}">About</a>
             </li>
+            <li class="nav-item {% if request.get_full_path == leaderboard %}active{% endif %}">
+                <a class="nav-link" href="{% url 'main:leaderboard' %}">LeaderBoard</a>
+            </li>
             &nbsp;&nbsp;
             <form class="form-inline my-2 my-lg-0" action="{% url 'main:search' %}" method="get">
                 <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search">

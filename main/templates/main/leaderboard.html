@@ -1,0 +1,81 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %}LeaderBoard{% endblock %}
+{% block body %}
+    <div class="container">
+        <h1 align="center">LEADERBOARD</h1>
+            <p align="center">The leaderboard is generated on the basis of number of questions solved in last 10 days.</p>
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                        <th>Student's Name</th>
+                      <th><center>Spoj Questions</center></th>
+                      <th><center>Codechef Questions</center></th>
+                      <th><center>Total Questions Solved</center></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for profile in profiles|dictsortreversed:"total_questions" %}
+                            <tr>
+                                <td>{{ profile.username }}</td>
+                                <td><center>{{ profile.spoj_rating }}</center></td>
+                                <td><center>{{ profile.codechef_rating }}</center></td>
+                                <td><center>{{ profile.total_questions }}</center></td>
+                            </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+
+
+    <!---<div class="row">
+        <div class="col-sm-2">
+                <div class="card">
+                    <h3 class="card-header">
+                        <center>Top Coders on Spoj</center>
+                    </h3>
+
+                    <div class="card-block">
+                        <ul class="list-group" style="width: 100%;">
+                            <div class="row">
+                                {% for profile in profiles|dictsortreversed:"spoj_rating" %}
+                                    <a style="width: 100%" href="{% url 'main:profile' profile.username %}">
+                                        <li class="list-group-item">
+                                                <div class="col-lg-10">@{{ profile.username }}
+                                                </div>
+                                                <div class="col-lg-2">{{ profile.spoj_rating }}
+                                                </div>
+                                        </li>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        <div class="col-sm-2">
+                <div class="card">
+                    <h3 class="card-header">
+                        <center>Top Coders on Codechef</center>
+                    </h3>
+
+                    <div class="card-block">
+                        <ul class="list-group" style="width: 100%;">
+                            <div class="row">
+                                {% for profile in profiles|dictsortreversed:"codechef_rating" %}
+                                    <a style="width: 100%" href="{% url 'main:profile' profile.username %}">
+                                        <li class="list-group-item">
+                                            <div class="col-lg-10">@{{ profile.username }}
+                                            </div>
+                                            <div class="col-lg-2">{{ profile.codechef_rating }}</div>
+                                        </li>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>--->
+    </div>
+{% endblock %}

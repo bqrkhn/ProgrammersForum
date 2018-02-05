@@ -1,3 +1,6 @@
+import requests
+import re
+from bs4 import BeautifulSoup
 from .form import Loginform, Signupform
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.models import User
@@ -8,7 +11,8 @@ from .models import Profile, Activity, View, Post
 from discussions.models import Question
 from django.db.models import Q, Case, When, Sum
 from django import forms
-
+from datetime import datetime
+import datetime
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -17,7 +21,6 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
-
 
 def login_view(request):
     if request.method == "POST":
@@ -32,6 +35,195 @@ def login_view(request):
             return HttpResponseRedirect(reverse('main:profile', kwargs={'username': user.username}))
     return render(request, 'main/login.html', {"form": Loginform(request.POST or None)})
 
+"""def init_crawl_codechef(x):
+    url = "https://www.codechef.com/recent/user?page=0&user_handle=" + x + "&_=1510300136417"
+    # mathecodician
+    # sagar_sam
+    # print(url)
+    pages = []
+    r = requests.get(url)
+    today = datetime.date.today()
+    soup = BeautifulSoup(r.content, "html.parser")
+    output2 = " "
+    for j in soup.text[12:]:
+        if j != ",":
+            output2 += j
+        else:
+            break
+
+    output2 = int(output2)
+    # print(output2)
+    count = 0
+    accepted = 0
+    count2 = 0
+    stop = 0
+    num_of_pages = 0
+    for a in range(0, output2):
+        # for a in range(0, 10):
+        url = "https://www.codechef.com/recent/user?page=" + str(a) + "&user_handle=" + x + "&_=1510300136417"
+        pages.append(url)
+
+    for i in pages:
+        count += 1
+
+    for item in pages:
+        num_of_pages += 1
+        r = requests.get(item)
+        soup = BeautifulSoup(r.content, "html.parser")
+        g_data3 = soup.find_all("td")
+        count = 0
+        for item3 in g_data3:
+            if (count % 4 == 0):
+                output = " "
+                output = item3.contents[0]
+                wordList = re.sub("[^\w]", " ", output).split()
+                if wordList.__len__() > 2:
+                    streee = wordList[2]
+                    if streee == 'ago':
+                        case = today
+                        case = case.replace(case.year - 2000)
+                        case = case.strftime('%d\/%m\/%Y')
+                        output = "12:12 PM " + case + "<\/td>"
+
+            elif count % 2 == 0:
+                flag = 0
+                points = []
+                for j in item3.contents[0]:
+                    flag += 1
+                if (flag == 6):
+                    counter = 0
+                    for j in item3.contents[0]:
+                        counter += 1
+                        if (counter == 3):
+                            points.append(str(j))
+                if (points == ['100']):
+                    accepted += 1
+                    x = output
+                    x = int(output[9:11])
+                    y = int(output[13:15])
+                    z = 2000
+                    z = z + int(output[17:19])
+                    someday = datetime.date(z, y, x)  # .strftime('%Y-%m-%d')
+                    some2 = datetime.date(z, y, x).strftime('%Y-%m-%d')
+                    pastday = today - datetime.timedelta(days=11)
+                    past = pastday.strftime('%Y-%m-%d')
+                    if (some2 > past):
+                        count2 += 1
+                    else:
+                        flag = 1
+                    output = " "
+            count += 1
+            if (stop == 1):
+                break
+        if (stop == 1):
+            break
+    output = int(count2)
+    init_codechef_rating = output
+    return init_codechef_rating"""
+
+def init_crawl_spoj(input):
+    pages = []
+    count = 0
+    count2 = 0
+    output = " "
+    stop = 0
+    flag5 = 1
+    today = datetime.date.today()
+    url5 = 'http://www.spoj.com/users/' + input
+    r5 = requests.get(url5)
+    soup5 = BeautifulSoup(r5.content, "html.parser")
+    x5 = soup5.find("div", {"class": "col-md-3"})
+    if x5 is None:
+        flag5 = 0
+
+    if flag5 is 1:
+        for a in range(0, 5):
+            url = 'http://www.spoj.com/status/' + input + '/all/start=' + str(a * 20)
+            pages.append(url)
+        for item in pages:
+            page = requests.get(item)
+            soup = BeautifulSoup(page.content, "html.parser")
+            artist_name_list = soup.find_all("tr", {"class": "kol1"})
+            artist_name_list2 = soup.find_all("tr", {"class": "kol2"})
+            artist_name_list3 = soup.find_all("tr", {"class": "kol3"})
+            for i in artist_name_list:
+                # print(i.contents[3].text)
+                count += 1
+                for j in i.contents[3].text:
+                    if j != " ":
+                        output += j
+                    else:
+                        output = output.strip()
+                        # print(output)
+                        x = int(output[:4])
+                        y = int(output[5:7])
+                        z = int(output[8:10])
+                        someday = datetime.date(x, y, z)  # .strftime('%Y-%m-%d')
+                        some2 = datetime.date(x, y, z).strftime('%Y-%m-%d')
+                        pastday = today - datetime.timedelta(days=30)
+                        past = pastday.strftime('%Y-%m-%d')
+                        if (some2 > past):
+                            count2 += 1
+                        else:
+                            stop = 1
+                        output = " "
+                        break
+                if (stop == 1):
+                    break
+            for i in artist_name_list2:
+                # print(i.contents[3].text)
+                count += 1
+                for j in i.contents[3].text:
+                    if j != " ":
+                        output += j
+                    else:
+                        output = output.strip()
+                        # print(output)
+                        x = int(output[:4])
+                        y = int(output[5:7])
+                        z = int(output[8:10])
+                        someday = datetime.date(x, y, z)  # .strftime('%Y-%m-%d')
+                        some2 = datetime.date(x, y, z).strftime('%Y-%m-%d')
+                        pastday = today - datetime.timedelta(days=10)
+                        past = pastday.strftime('%Y-%m-%d')
+                        if (some2 > past):
+                            count2 += 1
+                        else:
+                            stop = 1
+                        output = " "
+                        break
+                if (stop == 1):
+                    break
+            for i in artist_name_list3:
+                # print(i.contents[3].text)
+                count += 1
+                for j in i.contents[3].text:
+                    if j != " ":
+                        output += j
+                    else:
+                        output = output.strip()
+                        # print(output)
+                        x = int(output[:4])
+                        y = int(output[5:7])
+                        z = int(output[8:10])
+                        someday = datetime.date(x, y, z)  # .strftime('%Y-%m-%d')
+                        some2 = datetime.date(x, y, z).strftime('%Y-%m-%d')
+                        pastday = today - datetime.timedelta(days=10)
+                        past = pastday.strftime('%Y-%m-%d')
+                        if (some2 > past):
+                            count2 += 1
+                        else:
+                            stop = 1
+                        output = " "
+                        break
+                if (stop == 1):
+                    break
+            if (stop == 1):
+                break
+    output = int(count2)
+    init_spoj_rating = output
+    return init_spoj_rating
+
 
 def signup(request):
     if request.method == "POST":
@@ -42,11 +234,33 @@ def signup(request):
             user.last_name = request.POST['last_name']
             user.save()
             profile = Profile.objects.create(username=user, image="nullasofnow")
+            profile.hacker_earth_username = request.POST['hacker_earth_username']
+            profile.spoj_username = request.POST['spoj_username']
+            profile.codechef_username = request.POST['codechef_username']
+            profile.save()
+            #profile.codechef_rating = init_crawl_codechef(profile.codechef_username)
+            profile.spoj_rating = init_crawl_spoj(profile.spoj_username)
+            #profile.hacker_earth = init_crawl_hackerearth(profile.hacker_earth_rating)
             profile.save()
             login(request, user)
             return redirect('main:profile', username=user.username)
     return render(request, 'main/signup.html', {"form": Signupform(request.POST or None)})
 
+def LeaderBoard(request):
+
+    profiles = Profile.objects.all()
+    for profile in profiles:
+        try:
+            total = int(profile.codechef_rating + profile.spoj_rating + profile.hacker_earth_rating)
+            profile.total_questions = total
+            profile.save()
+        except ValueError:
+            pass
+
+    return render(request, 'main/leaderboard.html', {"profiles": Profile.objects.all()})
+    #spoj = yamini_96 , baqir96 , kshtjgpt15
+    #hacherearth = yami96 , sagar_sam , nazar.class , babe
+    #codechef = dpraveen , ritesh_gupta , topcoder_7
 
 def profile(request, username):
     if request.user.username == username:

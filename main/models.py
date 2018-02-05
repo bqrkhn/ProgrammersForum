@@ -12,10 +12,17 @@ class Profile(models.Model):
     image = models.CharField(max_length=255, default="")
     points = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
+    hacker_earth_username = models.CharField(max_length=255, default="", blank=True)
+    spoj_username = models.CharField(max_length=255, default="", blank=True)
+    codechef_username = models.CharField(max_length=255, default="", blank=True)
+    hacker_earth_rating = models.IntegerField(default=0)
+    spoj_rating = models.IntegerField(default=0)
+    codechef_rating = models.IntegerField(default=0)
+    total_questions = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.username.username
-
 
 class View(models.Model):
     ip = models.CharField(max_length=30, default="")

@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^signup/', views.signup, name='signup'),
     url(r'^search/', views.search, name='search'),
     url(r'^about/', views.about, name='about'),
+    url(r'^leaderboard/', views.LeaderBoard, name='leaderboard'),
     url(r'^activity/', views.activity_all, name='activity_all'),
     url('^profile/(?P<username>[a-zA-Z0-9_]+)', views.profile, name='profile'),
     url('^activity/(?P<username>[a-zA-Z0-9_]+)', views.activity, name='activity'),

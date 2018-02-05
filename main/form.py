@@ -18,7 +18,7 @@ class Loginform(forms.Form):
 class Signupform(forms.Form):
     class Meta:
         model = Profile
-        fields = ('username', 'first_name', 'last_name', 'email', 'faculty', 'enroll', 'password', 'confirm_pass')
+        fields = ('username', 'first_name', 'last_name', 'email', 'faculty', 'enroll', 'password', 'confirm_pass', 'hacker_earth_username', 'spoj_username', 'codechef_username')
 
     username = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'id': 'username',
                                                                             'class': 'form-control',
@@ -32,6 +32,15 @@ class Signupform(forms.Form):
     email = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'id': 'email',
                                                                          'class': 'form-control',
                                                                          'placeholder': 'somone@example.com'}))
+    hacker_earth_username = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'id': 'hacker_earth_username',
+                                                                                'class': 'form-control',
+                                                                                'placeholder': 'HackerEarth Username'}),required=False)
+    spoj_username = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'id': 'spoj_username',
+                                                                                'class': 'form-control',
+                                                                                'placeholder': 'SPOJ Username'}),required=False)
+    codechef_username = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'id': 'codechef_username',
+                                                                                'class': 'form-control',
+                                                                                'placeholder': 'CodeChef Username'}),required=False)
     password = forms.CharField(widget=forms.PasswordInput(attrs={'id': 'password',
                                                                  'class': 'form-control', 'placeholder': 'Password'}))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'id': 'confirm_password',
